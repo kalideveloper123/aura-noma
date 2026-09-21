@@ -1,1 +1,456 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aura Noma — Taylung</title>
 
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+min-height:100vh;
+background:
+radial-gradient(circle at 15% 20%,#182354 0,transparent 32%),
+radial-gradient(circle at 85% 75%,#162c44 0,transparent 35%),
+#070b16;
+color:#eef2ff;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+display:grid;
+place-items:center;
+padding:20px;
+}
+
+main{
+width:min(680px,94vw);
+background:rgba(15,22,42,.9);
+border:1px solid #414b76;
+border-radius:26px;
+padding:clamp(24px,6vw,45px);
+box-shadow:0 25px 90px #0009;
+}
+
+.bar{
+height:4px;
+background:linear-gradient(90deg,#8c7cff,#35d7ff);
+width:20%;
+margin-bottom:30px;
+transition:.4s;
+border-radius:20px;
+}
+
+.step{display:none}
+.active{display:block}
+
+.k{
+color:#35d7ff;
+font-size:12px;
+letter-spacing:.17em;
+text-transform:uppercase;
+}
+
+h1{
+font-size:clamp(32px,8vw,58px);
+line-height:1;
+letter-spacing:-.04em;
+margin:15px 0;
+}
+
+p{
+color:#aeb8d4;
+line-height:1.65;
+}
+
+input{
+width:100%;
+padding:17px;
+border-radius:13px;
+border:1px solid #536087;
+background:#080d1b;
+color:white;
+font-size:16px;
+margin-top:15px;
+outline:none;
+}
+
+input:focus{
+border-color:#8c7cff;
+box-shadow:0 0 0 4px #8c7cff22;
+}
+
+button{
+width:100%;
+padding:16px;
+border:0;
+border-radius:13px;
+background:linear-gradient(110deg,#8c7cff,#35d7ff);
+font-weight:800;
+font-size:16px;
+margin-top:13px;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.hint{
+color:#ff6b88;
+margin-top:13px;
+min-height:20px;
+}
+
+.upload{
+margin-top:20px;
+padding:25px;
+border:1px dashed #68749d;
+border-radius:17px;
+text-align:center;
+}
+
+.upload input{
+display:none;
+}
+
+.upload label{
+display:inline-block;
+padding:13px 17px;
+border:1px solid #68749d;
+border-radius:11px;
+cursor:pointer;
+}
+
+.preview{
+display:none;
+max-width:100%;
+max-height:280px;
+margin:18px auto 0;
+border-radius:15px;
+}
+
+.success{
+text-align:center;
+}
+
+.orb{
+width:125px;
+height:125px;
+border-radius:50%;
+margin:0 auto 28px;
+background:
+radial-gradient(circle,#fff,#9e8dff 12%,#5b4cf2 35%,#15122e 70%);
+box-shadow:0 0 60px #796dffaa;
+}
+
+.nom{
+background:linear-gradient(90deg,#fff,#9f92ff,#51dcff);
+-webkit-background-clip:text;
+color:transparent;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<div class="bar" id="bar"></div>
+
+<!-- STEP 1 -->
+
+<section class="step active" id="s1">
+
+<div class="k">01 · Identity Gate</div>
+
+<h1>
+Noma izlovchilar,<br>
+kirishga tayyormisiz?
+</h1>
+
+<p>
+Nomani olish uchun ismingizni kiriting.
+Ammo Aura Archive oddiy ism bilan ochilmaydi.
+</p>
+
+<input
+id="name"
+placeholder="Ismingizni kiriting..."
+autocomplete="off"
+>
+
+<button onclick="nameCheck()">
+Aura eshigini ochish →
+</button>
+
+<div class="hint" id="h1"></div>
+
+</section>
+
+
+<!-- STEP 2 -->
+
+<section class="step" id="s2">
+
+<div class="k">02 · Aura Calibration</div>
+
+<h1>
+Aura levelingizni kiriting
+</h1>
+
+<p>
+Sensor faqat afsonaviy darajani qabul qiladi.
+Kamida <b>+9999</b> talab qilinadi.
+</p>
+
+<input
+id="aura"
+placeholder="+9999 yoki undan yuqori"
+inputmode="numeric"
+>
+
+<button onclick="auraCheck()">
+Aura-ni kalibrlash ✦
+</button>
+
+<div class="hint" id="h2"></div>
+
+</section>
+
+
+<!-- STEP 3 -->
+
+<section class="step" id="s3">
+
+<div class="k">03 · Master Verification</div>
+
+<h1>
+Noma olish uchun kim bilan tayyorlandingiz?
+</h1>
+
+<p>
+Ustozingizning maxfiy nomini kiriting.
+</p>
+
+<input
+id="master"
+placeholder="Ustoz nomi..."
+autocomplete="off"
+>
+
+<button onclick="masterCheck()">
+Ustozni tasdiqlash →
+</button>
+
+<div class="hint" id="h3"></div>
+
+</section>
+
+
+<!-- STEP 4 -->
+
+<section class="step" id="s4">
+
+<div class="k">04 · Aura Proof</div>
+
+<h1>
+Aura levelingizni isbotlash uchun suratingizni yuklang
+</h1>
+
+<p>
+Arxiv dalilni qabul qilgach,
+so‘nggi muhr ochiladi.
+</p>
+
+<div class="upload">
+
+<label for="photo">
+📸 Suratingizni tanlang
+</label>
+
+<input
+id="photo"
+type="file"
+accept="image/*"
+onchange="photoCheck(event)"
+>
+
+<img
+class="preview"
+id="preview"
+alt="Yuklangan surat"
+>
+
+</div>
+
+<button
+id="finish"
+disabled
+onclick="finish()"
+>
+Aura nomasini olish ✨
+</button>
+
+</section>
+
+
+<!-- FINAL -->
+
+<section class="step success" id="s5">
+
+<div class="orb"></div>
+
+<div class="k">
+AURA ARCHIVE · VERIFIED
+</div>
+
+<h1 class="nom">
+TABRIKLAYMIZ!
+</h1>
+
+<p>
+Siz Aura Nomasini qo‘lga kiritdingiz.
+</p>
+
+<h2>
+Taylung
+</h2>
+
+<p>
+✦ Aura Level +9999 Verified ✦
+</p>
+
+</section>
+
+</main>
+
+
+<script>
+
+function show(n){
+
+document
+.querySelectorAll(".step")
+.forEach(x=>x.classList.remove("active"));
+
+document
+.getElementById("s"+n)
+.classList.add("active");
+
+document
+.getElementById("bar")
+.style.width=(n*20)+"%";
+
+}
+
+
+function nameCheck(){
+
+const value=
+document
+.getElementById("name")
+.value
+.trim()
+.toLowerCase();
+
+if(value==="taylung"){
+
+show(2);
+
+}else{
+
+document
+.getElementById("h1")
+.textContent=
+"✦ Faqat “taylung” kaliti bilan eshik ochiladi.";
+
+}
+
+}
+
+
+function auraCheck(){
+
+const value=
+document
+.getElementById("aura")
+.value
+.replace(/[+,\s]/g,"");
+
+const number=Number(value);
+
+if(number>=9999){
+
+show(3);
+
+}else{
+
+document
+.getElementById("h2")
+.textContent=
+"⚡ Aura yetarli emas. Kamida +9999 kerak.";
+
+}
+
+}
+
+
+function masterCheck(){
+
+const value=
+document
+.getElementById("master")
+.value
+.trim()
+.toLowerCase();
+
+if(value==="master shifu"){
+
+show(4);
+
+}else{
+
+document
+.getElementById("h3")
+.textContent=
+"🔒 Bu ustoz Nomani bera olmaydi. “master shifu” deb yozing.";
+
+}
+
+}
+
+
+function photoCheck(event){
+
+const file=event.target.files[0];
+
+if(!file) return;
+
+if(!file.type.startsWith("image/")) return;
+
+const image=
+document.getElementById("preview");
+
+image.src=
+URL.createObjectURL(file);
+
+image.style.display="block";
+
+document
+.getElementById("finish")
+.disabled=false;
+
+}
+
+
+function finish(){
+
+show(5);
+
+}
+
+</script>
+
+</body>
+</html>
